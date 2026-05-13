@@ -5,6 +5,7 @@ const axios = require("axios");
 const key = process.env.TRELLO_KEY;
 const token = process.env.TRELLO_TOKEN;
 const diasLimite = Number(process.env.DIAS_PARADO);
+const limiteCardsEmAndamento = Number(process.env.LIMITE_CARDS_EM_ANDAMENTO);
 
 // Código curto do quadro Trello usado no projeto
 const boardShortId = "6ox17cAt";
@@ -151,6 +152,17 @@ async function analisarCards() {
     console.log(
       `Total de cartões em andamento: ${cardsEmAndamento.length}\n`
     );
+
+    // Analisa possível sobrecarga na lista "Em andamento"
+if (cardsEmAndamento.length >= limiteCardsEmAndamento) {
+  console.log("⚠️ POSSÍVEL SOBRECARGA IDENTIFICADA!");
+  console.log(
+    `A lista "${nomeListaAnalisada}" possui ${cardsEmAndamento.length} cartões em andamento.`
+  );
+  console.log(
+    `Limite configurado para análise: ${limiteCardsEmAndamento} cartões.\n`
+  );
+}
 
     for (const card of cardsEmAndamento) {
       const ultimaAtividade = new Date(
