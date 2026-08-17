@@ -3,7 +3,8 @@ const express = require("express");
 const axios = require("axios");
 
 const app = express();
-const port = 3000;
+const host = "0.0.0.0";
+const port = Number(process.env.PORT) || 3000;
 
 const key = process.env.TRELLO_KEY;
 const token = process.env.TRELLO_TOKEN;
@@ -196,6 +197,6 @@ app.get("/atividade", async (req, res) => {
   }
 });
 
-app.listen(port, () => {
+app.listen(port, host, () => {
   console.log(`Dashboard rodando em http://localhost:${port}/dashboard.html`);
 });
