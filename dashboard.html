@@ -1,94 +1,156 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <title>Bot Gargalos</title>
-
+  <title>FlowGuard - Monitoramento de Gargalos</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
+  <div class="page-ambient" aria-hidden="true"></div>
 
-  <div class="container">
-
-    <div class="bot">🤖</div>
-
-    <h1>Bot Gargalos</h1>
-
-    <button onclick="carregarDados()" class="botao-atualizar">
-      🔄 Atualizar Dashboard
-    </button>
-
-    <p class="subtitulo">
-      Painel visual para apoio à identificação de gargalos em fluxos Kanban.
-    </p>
-
-    <div class="resumo">
-
-      <div class="resumo-card">
-        <span>🚨 Gargalos</span>
-        <strong id="total-gargalos">0</strong>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand-reference" aria-label="FlowGuard - Kanban Intelligence">
+        <img src="assets/flowguard-logo.png" alt="FlowGuard" />
       </div>
 
-      <div class="resumo-card">
-        <span>📊 Em andamento</span>
-        <strong id="resumo-em-andamento">0</strong>
+      <nav class="sidebar-nav" aria-label="Menu principal">
+        <a href="#visao-geral" class="nav-item active">
+          <span class="nav-symbol nav-grid" aria-hidden="true"></span>
+          <span>Visão Geral</span>
+        </a>
+        <a href="#gargalos" class="nav-item">
+          <span class="nav-symbol nav-pulse" aria-hidden="true"></span>
+          <span>Gargalos</span>
+        </a>
+        <a href="#impedimentos" class="nav-item">
+          <span class="nav-symbol nav-stack" aria-hidden="true"></span>
+          <span>Impedimentos</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-status-card">
+        <div class="sidebar-label">Status do sistema</div>
+        <div class="sidebar-status"><span></span>Monitorando</div>
+        <p>Monitoramento ativo e conectado ao Trello.</p>
+        <div class="micro-chart" aria-hidden="true">
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
       </div>
 
-    </div>
-
-    <div class="status-geral" id="status-geral">
-
-      <h2 id="status-titulo">
-        Analisando fluxo...
-      </h2>
-
-      <p id="status-descricao">
-        Aguardando dados do Trello.
-      </p>
-
-    </div>
-
-    <div class="card alerta">
-
-      <h2>🚨 Gargalos identificados</h2>
-
-      <div id="lista-gargalos"></div>
-
-    </div>
-
-    <div class="card alerta">
-
-      <h2>⚠️ Possível sobrecarga identificada</h2>
-
-      <p>
-        A lista “Em andamento” possui tarefas acima do limite configurado.
-      </p>
-
-      <div class="numero" id="total-cards">
-        0 tarefas
+      <div class="sidebar-art" aria-hidden="true">
+        <img src="assets/sidebar-glass.png" alt="" />
       </div>
 
-    </div>
+      <div class="engine-card">
+        <span class="engine-icon" aria-hidden="true"></span>
+        <div>
+          <strong>FlowGuard Engine</strong>
+          <small><span></span> Conectado ao Trello</small>
+        </div>
+      </div>
+    </aside>
 
-    <div class="card ok">
+    <main class="main-panel">
+      <header class="topbar" id="visao-geral">
+        <div class="topbar-copy">
+          <div class="eyebrow">Fluxo Kanban</div>
+          <h1>Dashboard operacional</h1>
+          <p>Gargalos, impedimentos e movimentações do fluxo em uma única visão.</p>
+        </div>
 
-      <h2>📊 Monitoramento ativo</h2>
+        <img class="hero-reference" src="assets/hero-glass.png" alt="" aria-hidden="true" />
 
-      <p>
-        O sistema está analisando tarefas em andamento e possíveis gargalos.
-      </p>
+        <div class="topbar-actions">
+          <span class="status-pill">Monitorando</span>
+          <button onclick="carregarDados()" class="btn-atualizar">↻&nbsp;&nbsp;Atualizar</button>
+        </div>
+      </header>
 
-    </div>
+      <section class="metrics" aria-label="Resumo geral">
+        <article class="metric-card metric-progress">
+          <div class="metric-icon icon-pulse" aria-hidden="true">⌁</div>
+          <div class="metric-copy">
+            <div class="metric-label">Em andamento</div>
+            <div class="metric-value" id="resumo-em-andamento">0</div>
+            <div class="metric-sublabel" id="total-cards">0 tarefas</div>
+          </div>
+          <div class="sparkline spark-blue" aria-hidden="true"></div>
+        </article>
 
+        <article class="metric-card metric-bottlenecks">
+          <div class="metric-icon icon-target" aria-hidden="true">◎</div>
+          <div class="metric-copy">
+            <div class="metric-label">Gargalos identificados</div>
+            <div class="metric-value" id="total-gargalos">0</div>
+            <div class="metric-sublabel">tarefas sinalizadas</div>
+          </div>
+          <div class="sparkline spark-violet" aria-hidden="true"></div>
+        </article>
+
+        <article class="metric-card status-card" id="status-geral">
+          <div class="metric-copy">
+            <div class="metric-label">Saúde do fluxo</div>
+            <div class="metric-value status-value" id="status-titulo">ATENÇÃO</div>
+            <div class="metric-desc" id="status-descricao">Aguardando dados do Trello</div>
+          </div>
+          <div class="health-ring" aria-hidden="true">
+            <span></span>
+          </div>
+        </article>
+      </section>
+
+      <section class="main-grid">
+        <section class="panel panel-gargalos" id="gargalos">
+          <div class="section-header">
+            <div>
+              <div class="section-kicker">Monitoramento ativo</div>
+              <h2>Gargalos identificados</h2>
+              <div class="section-subtitle">Tarefas que exigem atenção ou decisão da equipe</div>
+            </div>
+            <span class="section-tag">Atenção</span>
+          </div>
+
+          <div id="lista-gargalos" class="gargalos-container">
+            <div class="empty-state">Nenhum gargalo identificado. Fluxo saudável.</div>
+          </div>
+        </section>
+
+        <aside class="panel panel-impedimentos" id="impedimentos">
+          <div class="section-header">
+            <div>
+              <div class="section-kicker">Contexto da equipe</div>
+              <h2>Central de Impedimentos</h2>
+              <div class="section-subtitle">Registros informados pela equipe</div>
+            </div>
+            <span class="section-tag muted">Registros</span>
+          </div>
+
+          <div id="central-impedimentos" class="impedimentos-container">
+            <div class="empty-state">Nenhum impedimento registrado.</div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="panel panel-activity">
+        <div class="section-header compact">
+          <div>
+            <div class="section-kicker">Histórico do fluxo</div>
+            <h2>Atividade recente</h2>
+            <div class="section-subtitle">Últimas alterações registradas pelo sistema</div>
+          </div>
+          <span class="section-tag muted activity-tag">Fluxo</span>
+        </div>
+
+        <div id="atividade-recente" class="activity-empty-state empty-state">
+          Nenhuma atividade recente disponível no momento.
+        </div>
+      </section>
+    </main>
   </div>
 
   <script src="script.js"></script>
-
 </body>
-
 </html>
-

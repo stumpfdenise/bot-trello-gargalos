@@ -261,4 +261,85 @@ async function cardJaPossuiComentarioDoBot(cardId) {
   );
 }
 
+/**
+ * Remove etiqueta do card.
+ */
+async function removerLabelDoCard(cardId, labelId) {
+  const url = `https://api.trello.com/1/cards/${cardId}/idLabels/${labelId}`;
+
+  await axios.delete(url, {
+    params: {
+      key,
+      token,
+    },
+  });
+}
+
+/**
+ * Verifica e corrige etiquetas de gargalo.
+ * Remove a etiqueta "Possível Gargalo" de cards que:
+ * - não estão mais na lista "Em andamento"
+ * - ou já não atendem ao critério de dias parado
+ */
+async function verificarECorrigirEtiquetasGargalo() {
+  try {
+    const listaEmAndamentoId = await buscarIdListaEmAndamento();
+    const labelGargaloId = await buscarLabelGargalo();
+
+    const url = `https://api.trello.com/1/boards/${boardShortId}/cards`;
+
+    const resposta = await axios.get(url, {
+      params: {
+        key,
+        token,
+        fields: "id,name,dateLastActivity,idLabels,idList",
+      },
+    });
+
+    // Todos os cards do quadro
+    const todosOsCards = resposta.data;
+
+    for (const card of todosOsCards) {
+      const possuidEtiquetaGargalo = card.idLabels.includes(labelGargaloId);
+
+      if (!possuidEtiquetaGargalo) {
+        // Card não possui etiqueta, nada a fazer
+        continue;
+      }
+
+      // Card possui etiqueta, verificar se deve ser removida
+      const estaEmAndamento = card.idList === listaEmAndamentoId;
+
+      if (!estaEmAndamento) {
+        // Etiqueta deve ser removida porque card não está mais em "Em andamento"
+        await removerLabelDoCard(card.id, labelGargaloId);
+        console.log(
+          `🔄 Etiqueta removida: ${card.name} não está mais em "Em andamento".`
+        );
+        continue;
+      }
+
+      // Card está em "Em andamento", verificar se ainda atende ao critério
+      const ultimaAtividade = new Date(card.dateLastActivity);
+      const hoje = new Date();
+      const diferencaMs = hoje - ultimaAtividade;
+      const diasParado = Math.floor(diferencaMs / (1000 * 60 * 60 * 24));
+
+      if (diasParado < diasLimite) {
+        // Card deixou de atender ao critério, remover etiqueta
+        await removerLabelDoCard(card.id, labelGargaloId);
+        console.log(
+          `🔄 Etiqueta removida: ${card.name} não está mais em gargalo (${diasParado} dias).`
+        );
+      }
+    }
+  } catch (erro) {
+    console.error(
+      "❌ Erro ao verificar/corrigir etiquetas:",
+      erro.response?.data || erro.message
+    );
+  }
+}
+
 analisarCards();
+verificarECorrigirEtiquetasGargalo();
