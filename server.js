@@ -79,7 +79,7 @@ app.get("/dados", async (req, res) => {
     res.json({
       totalEmAndamento: cardsEmAndamento.length,
       limiteCardsEmAndamento,
-      sobrecarga: cardsEmAndamento.length >= limiteCardsEmAndamento,
+      sobrecarga: cardsEmAndamento.length > limiteCardsEmAndamento,
       gargalos,
     });
   } catch (erro) {

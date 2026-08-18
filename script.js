@@ -81,6 +81,7 @@ function atualizarStatusGeral(dados) {
   const sobrecargaWIP = dados.sobrecarga || false;
   const totalEmAndamento = dados.totalEmAndamento || 0;
   const limiteCardsEmAndamento = dados.limiteCardsEmAndamento || 0;
+  const wipNoLimite = totalEmAndamento === limiteCardsEmAndamento;
 
   // Remover classes anteriores
   statusGeral.classList.remove("verde", "amarelo", "vermelho");
@@ -98,6 +99,8 @@ function atualizarStatusGeral(dados) {
 
       if (sobrecargaWIP) {
         descricao = `Há múltiplos gargalos identificados (${totalGargalos}). Limite de trabalho em andamento excedido: ${totalEmAndamento} de ${limiteCardsEmAndamento} tarefas. Atenção da equipe necessária.`;
+      } else if (wipNoLimite) {
+        descricao = `Há múltiplos gargalos identificados (${totalGargalos}). WIP no limite: ${totalEmAndamento} de ${limiteCardsEmAndamento} tarefas.`;
       } else {
         descricao = "Há múltiplos gargalos identificados. Recomenda-se atenção da equipe.";
       }
@@ -107,6 +110,8 @@ function atualizarStatusGeral(dados) {
 
       if (sobrecargaWIP) {
         descricao = `Algumas tarefas podem precisar de acompanhamento. Limite de trabalho em andamento excedido: ${totalEmAndamento} de ${limiteCardsEmAndamento} tarefas.`;
+      } else if (wipNoLimite) {
+        descricao = `Algumas tarefas podem precisar de acompanhamento. WIP no limite: ${totalEmAndamento} de ${limiteCardsEmAndamento} tarefas.`;
       } else {
         descricao = "Algumas tarefas podem precisar de acompanhamento.";
       }
@@ -116,6 +121,10 @@ function atualizarStatusGeral(dados) {
     status = "amarelo";
     titulo = "ATENÇÃO";
     descricao = `Limite de trabalho em andamento excedido: ${totalEmAndamento} de ${limiteCardsEmAndamento} tarefas.`;
+  } else if (wipNoLimite) {
+    status = "verde";
+    titulo = "SAUDÁVEL";
+    descricao = `WIP no limite: ${totalEmAndamento} de ${limiteCardsEmAndamento} tarefas.`;
   }
 
   statusGeral.classList.add(status);
