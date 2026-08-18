@@ -14,6 +14,10 @@ const limiteCardsEmAndamento = Number(process.env.LIMITE_CARDS_EM_ANDAMENTO);
 const boardShortId = "6ox17cAt";
 const nomeListaAnalisada = "Em andamento ";
 
+app.get("/", (req, res) => {
+  res.redirect("/dashboard.html");
+});
+
 app.use(express.static("."));
 
 async function buscarListasDoQuadro() {
