@@ -4,6 +4,21 @@
  */
 
 const impedimentosSalvosComCampoLimpo = new Set();
+const chaveTema = "flowguard-tema";
+
+function aplicarTema(tema) {
+  const temaAtual = tema === "light" ? "light" : "dark";
+  document.documentElement.dataset.theme = temaAtual;
+
+  const botaoTema = document.getElementById("theme-toggle");
+  if (botaoTema) {
+    botaoTema.querySelector(".theme-toggle-icon").textContent = temaAtual === "light" ? "☾" : "☀";
+    botaoTema.querySelector(".theme-toggle-label").textContent = temaAtual === "light" ? "Escuro" : "Claro";
+    botaoTema.setAttribute("aria-label", `Alternar para tema ${temaAtual === "light" ? "escuro" : "claro"}`);
+  }
+}
+
+aplicarTema(localStorage.getItem(chaveTema));
 
 async function carregarDados() {
   try {
@@ -726,6 +741,15 @@ function salvarImpedimento(nomeCard) {
 carregarDados();
 
 document.addEventListener("DOMContentLoaded", () => {
+  const botaoTema = document.getElementById("theme-toggle");
+  if (botaoTema) {
+    botaoTema.addEventListener("click", () => {
+      const proximoTema = document.documentElement.dataset.theme === "light" ? "dark" : "light";
+      localStorage.setItem(chaveTema, proximoTema);
+      aplicarTema(proximoTema);
+    });
+  }
+
   const botaoAtualizar = Array.from(document.querySelectorAll("button"))
     .find((botao) => botao.textContent.trim().toLowerCase().includes("atualizar"));
 
