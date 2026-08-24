@@ -153,6 +153,7 @@ function renderizarGargalos(gargalos) {
 
   // Renderizar cada gargalo
   gargalos.forEach((gargalo) => {
+    const textoImpedimento = obterTextoImpedimento(gargalo);
     const urlLink = gargalo.url
       ? `<a class="gargalo-link" href="${gargalo.url}" target="_blank" rel="noopener noreferrer">Ver no Trello</a>`
       : "";
@@ -182,7 +183,7 @@ function renderizarGargalos(gargalos) {
           data-card-id="${gargalo.id || ""}"
           data-card-name="${gargalo.nome}"
           placeholder="Descreva o motivo do bloqueio ou necessidade de reavaliação..."
-        >${localStorage.getItem(`impedimento-${gargalo.nome}`) || ""}</textarea>
+        >${textoImpedimento}</textarea>
 
         <button
           class="botao-impedimento"
@@ -197,6 +198,25 @@ function renderizarGargalos(gargalos) {
   });
 }
 
+function obterTextoImpedimento(gargalo) {
+  if (gargalo.id) {
+    const valorPorId = localStorage.getItem(`impedimento-id-${gargalo.id}`);
+
+    if (valorPorId) {
+      try {
+        const dados = JSON.parse(valorPorId);
+        if (dados && typeof dados.texto === "string" && dados.texto.trim()) {
+          return dados.texto;
+        }
+      } catch (erro) {
+        console.warn("Registro de impedimento por ID inválido:", gargalo.id);
+      }
+    }
+  }
+
+  return localStorage.getItem(`impedimento-${gargalo.nome}`) || "";
+}
+
 /**
  * Renderiza a central de impedimentos com todos os registros do localStorage
  */
@@ -204,12 +224,16 @@ function renderizarCentralImpedimentos(gargalos) {
   const centralImpedimentos = document.getElementById("central-impedimentos");
 
   const impedimentosMap = new Map();
+  const tarefasComRegistroPorId = new Set();
+  const chavesArmazenamento = Object.keys(localStorage)
+    .filter((chave) => chave.startsWith("impedimento-"))
+    .sort((a, b) => {
+      const registroPorIdA = a.startsWith("impedimento-id-");
+      const registroPorIdB = b.startsWith("impedimento-id-");
+      return Number(registroPorIdB) - Number(registroPorIdA);
+    });
 
-  Object.keys(localStorage).forEach((chave) => {
-    if (!chave.startsWith("impedimento-")) {
-      return;
-    }
-
+  chavesArmazenamento.forEach((chave) => {
     const valor = localStorage.getItem(chave);
 
     if (!valor || !valor.trim()) {
@@ -249,9 +273,16 @@ function renderizarCentralImpedimentos(gargalos) {
       };
     }
 
-    const chaveUnica = registro.cardId
+    const registroPorId = Boolean(registro.cardId);
+    const chaveUnica = registroPorId
       ? `id:${registro.cardId}`
       : `nome:${registro.tarefa}`;
+
+    if (registroPorId) {
+      tarefasComRegistroPorId.add(registro.tarefa);
+    } else if (tarefasComRegistroPorId.has(registro.tarefa)) {
+      return;
+    }
 
     if (!impedimentosMap.has(chaveUnica)) {
       impedimentosMap.set(chaveUnica, registro);
@@ -615,7 +646,6 @@ function salvarImpedimento(nomeCard) {
     }
 
     localStorage.setItem(chaveArmazenamento, JSON.stringify(dadosRegistro));
-    localStorage.setItem(chaveLegada, texto);
   } else {
     localStorage.setItem(chaveLegada, texto);
   }
