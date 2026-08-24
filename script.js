@@ -170,7 +170,6 @@ function renderizarGargalos(gargalos) {
 
   // Renderizar cada gargalo
   gargalos.forEach((gargalo) => {
-    const textoImpedimento = obterTextoImpedimento(gargalo);
     const urlLink = gargalo.url
       ? `<a class="gargalo-link" href="${gargalo.url}" target="_blank" rel="noopener noreferrer">Ver no Trello</a>`
       : "";
@@ -200,7 +199,7 @@ function renderizarGargalos(gargalos) {
           data-card-id="${gargalo.id || ""}"
           data-card-name="${gargalo.nome}"
           placeholder="Descreva o motivo do bloqueio ou necessidade de reavaliação..."
-        >${textoImpedimento}</textarea>
+        ></textarea>
 
         <button
           class="botao-impedimento"

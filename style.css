@@ -150,10 +150,19 @@ button, textarea, a { font: inherit; }
   border-bottom: 1px solid rgba(121,139,219,.12);
 }
 .brand-reference img {
+  grid-area:1 / 1;
   width: 235px;
   height: 207px;
   object-fit: contain;
-  filter: drop-shadow(0 16px 28px rgba(57, 77, 171, .12));
+}
+.brand-reference .logo-light {
+  display:none;
+}
+[data-theme="light"] .brand-reference .logo-dark {
+  display:none;
+}
+[data-theme="light"] .brand-reference .logo-light {
+  display:block;
 }
 
 .sidebar-nav {
