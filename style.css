@@ -235,22 +235,6 @@ button, textarea, a { font: inherit; }
 .micro-chart i:nth-child(5){height:25px}.micro-chart i:nth-child(6){height:39px}
 .micro-chart i:nth-child(7){height:31px}.micro-chart i:nth-child(8){height:36px}
 
-.sidebar-art {
-  position:relative;
-  height:230px;
-  margin:-2px -20px 0;
-  overflow:hidden;
-  pointer-events:none;
-}
-.sidebar-art img {
-  position:absolute;
-  width:310px;
-  left:-7px;
-  top:-25px;
-  opacity:.76;
-  filter:brightness(.90) saturate(.70) drop-shadow(0 20px 35px rgba(43,61,155,.10));
-}
-
 .engine-card {
   margin-top:auto;
   padding:14px 15px;
@@ -297,6 +281,9 @@ button, textarea, a { font: inherit; }
   overflow:hidden;
   display:flex;
   align-items:flex-start;
+  background:
+    radial-gradient(circle at 72% 0%, rgba(92, 105, 196, .11), transparent 34%),
+    linear-gradient(145deg, rgba(10, 17, 48, .79), rgba(5, 10, 31, .72));
 }
 .topbar-copy { position:relative; z-index:3; flex:1 1 0; min-width:0; max-width:610px; }
 .eyebrow,
@@ -319,17 +306,6 @@ button, textarea, a { font: inherit; }
   color:var(--secondary);
   font-size:.98rem;
   overflow-wrap:break-word;
-}
-.hero-reference {
-  position:absolute;
-  z-index:1;
-  right:155px;
-  top:-3px;
-  width:510px;
-  height:190px;
-  object-fit:contain;
-  opacity:.86;
-  filter:brightness(.95) saturate(.62) contrast(1.02);
 }
 .topbar-actions {
   position:relative;
@@ -663,7 +639,6 @@ button, textarea, a { font: inherit; }
 
 @media (max-width: 1250px) {
   .app-shell { grid-template-columns:250px minmax(0,1fr); gap:18px; }
-  .hero-reference { right:95px; opacity:.55; }
   .activity-list { grid-template-columns:repeat(3,minmax(0,1fr)); }
 }
 @media (max-width: 980px) {
@@ -671,10 +646,8 @@ button, textarea, a { font: inherit; }
   .sidebar { position:relative; height:auto; min-height:0; top:0; }
   .brand-reference { height:150px; }
   .brand-reference img { width:180px;height:145px; }
-  .sidebar-art { display:none; }
   .engine-card { margin-top:0; }
   .metrics,.main-grid { grid-template-columns:1fr; }
-  .hero-reference { display:none; }
 }
 @media (max-width: 650px) {
   .app-shell { margin:6px auto; }
