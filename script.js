@@ -3,6 +3,8 @@
  * Script de carregamento e renderização de dados
  */
 
+const impedimentosSalvosComCampoLimpo = new Set();
+
 async function carregarDados() {
   try {
     const [respostaDados, respostaAtividade] = await Promise.all([
@@ -199,6 +201,14 @@ function renderizarGargalos(gargalos) {
 }
 
 function obterTextoImpedimento(gargalo) {
+  const chaveCampo = gargalo.id
+    ? `id:${gargalo.id}`
+    : `nome:${gargalo.nome}`;
+
+  if (impedimentosSalvosComCampoLimpo.has(chaveCampo)) {
+    return "";
+  }
+
   if (gargalo.id) {
     const valorPorId = localStorage.getItem(`impedimento-id-${gargalo.id}`);
 
@@ -693,6 +703,7 @@ function salvarImpedimento(nomeCard) {
     localStorage.setItem(chaveLegada, texto);
   }
 
+  impedimentosSalvosComCampoLimpo.add(cardId ? `id:${cardId}` : `nome:${nomeCard}`);
   campo.value = "";
 
   const resposta = fetch("/dados")
@@ -700,6 +711,10 @@ function salvarImpedimento(nomeCard) {
     .then(dados => {
       if (Array.isArray(dados.gargalos)) {
         renderizarCentralImpedimentos(dados.gargalos);
+      }
+      const campoAtual = document.getElementById(`impedimento-${nomeCard}`);
+      if (campoAtual) {
+        campoAtual.value = "";
       }
     })
     .catch(erro => console.error("Erro ao atualizar central:", erro));
