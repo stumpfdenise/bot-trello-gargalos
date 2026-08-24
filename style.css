@@ -298,7 +298,7 @@ button, textarea, a { font: inherit; }
   display:flex;
   align-items:flex-start;
 }
-.topbar-copy { position:relative; z-index:3; max-width:610px; }
+.topbar-copy { position:relative; z-index:3; flex:1 1 0; min-width:0; max-width:610px; }
 .eyebrow,
 .section-kicker {
   color:#aeb7de;
@@ -318,6 +318,7 @@ button, textarea, a { font: inherit; }
   margin-top:18px;
   color:var(--secondary);
   font-size:.98rem;
+  overflow-wrap:break-word;
 }
 .hero-reference {
   position:absolute;
@@ -334,8 +335,11 @@ button, textarea, a { font: inherit; }
   position:relative;
   z-index:4;
   margin-left:auto;
+  min-width:0;
   display:flex;
   gap:12px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
 }
 .status-pill,
 .btn-atualizar {
@@ -344,6 +348,8 @@ button, textarea, a { font: inherit; }
   display:inline-flex;
   align-items:center;
   justify-content:center;
+  max-width:100%;
+  white-space:nowrap;
 }
 .status-pill {
   padding:0 17px;
@@ -375,6 +381,7 @@ button, textarea, a { font: inherit; }
 }
 .metric-card {
   min-height:160px;
+  min-width:0;
   position:relative;
   border-radius:19px;
   overflow:hidden;
@@ -401,7 +408,7 @@ button, textarea, a { font: inherit; }
   border-color:rgba(167,125,224,.26);
   background:rgba(74,42,112,.18);
 }
-.metric-copy { position:relative; z-index:2; }
+.metric-copy { position:relative; z-index:2; min-width:0; }
 .metric-label {
   color:#b4bdd8;
   font-size:.7rem;
@@ -484,6 +491,7 @@ button, textarea, a { font: inherit; }
   gap:15px;
   margin-bottom:20px;
 }
+.section-header > div { min-width:0; }
 .section-header h2 {
   margin-top:5px;
   font-size:1.35rem;
@@ -495,6 +503,8 @@ button, textarea, a { font: inherit; }
   font-size:.82rem;
 }
 .section-tag {
+  flex:0 1 auto;
+  max-width:100%;
   padding:9px 16px;
   border-radius:18px;
   border:1px solid rgba(243,174,61,.30);
@@ -503,6 +513,8 @@ button, textarea, a { font: inherit; }
   text-transform:uppercase;
   font-size:.68rem;
   letter-spacing:.07em;
+  text-align:center;
+  overflow-wrap:break-word;
 }
 .section-tag.muted {
   color:#c4aee3;
@@ -523,6 +535,7 @@ button, textarea, a { font: inherit; }
   background:linear-gradient(145deg,rgba(4,9,28,.93),rgba(6,9,29,.84));
 }
 .gargalo-nome {
+  overflow-wrap:anywhere;
   font-size:1.05rem;
   font-weight:680;
   margin-bottom:10px;
@@ -550,6 +563,7 @@ button, textarea, a { font: inherit; }
   margin-bottom:15px;
   color:var(--secondary);
   font-size:.78rem;
+  overflow-wrap:break-word;
 }
 .campo-impedimento {
   width:100%;min-height:88px;
@@ -582,7 +596,7 @@ button, textarea, a { font: inherit; }
   border-radius:14px;
   background:linear-gradient(145deg,rgba(15,15,48,.74),rgba(8,10,31,.72));
 }
-.impedimento-titulo { font-weight:670; margin-bottom:8px; }
+.impedimento-titulo { font-weight:670; margin-bottom:8px; overflow-wrap:anywhere; }
 .impedimento-status {
   display:inline-block;
   padding:5px 9px;
@@ -592,7 +606,7 @@ button, textarea, a { font: inherit; }
   color:#cab6dc;
   font-size:.68rem;
 }
-.impedimento-texto { color:var(--secondary); font-size:.87rem; line-height:1.55; }
+.impedimento-texto { color:var(--secondary); font-size:.87rem; line-height:1.55; overflow-wrap:anywhere; }
 
 .empty-state {
   padding:22px 18px;
@@ -643,7 +657,7 @@ button, textarea, a { font: inherit; }
   font-size:.67rem;
   margin-bottom:5px;
 }
-.activity-text { color:var(--secondary); font-size:.73rem; line-height:1.4; }
+.activity-text { color:var(--secondary); font-size:.73rem; line-height:1.4; overflow-wrap:anywhere; }
 .activity-text strong { display:block; color:var(--text); font-size:.76rem; }
 .activity-text span { color:#9da8c7; }
 
