@@ -225,6 +225,9 @@ function renderizarCentralImpedimentos(gargalos) {
 
   const impedimentosMap = new Map();
   const tarefasComRegistroPorId = new Set();
+  const nomesPorId = new Map((gargalos || [])
+    .filter((gargalo) => gargalo && gargalo.id && gargalo.nome)
+    .map((gargalo) => [String(gargalo.id), gargalo.nome]));
   const chavesArmazenamento = Object.keys(localStorage)
     .filter((chave) => chave.startsWith("impedimento-"))
     .sort((a, b) => {
@@ -248,7 +251,7 @@ function renderizarCentralImpedimentos(gargalos) {
 
         if (dados && dados.texto && dados.texto.trim()) {
           registro = {
-            tarefa: dados.cardName || chave.replace("impedimento-id-", ""),
+            tarefa: dados.cardName || nomesPorId.get(String(dados.cardId)) || chave.replace("impedimento-id-", ""),
             texto: dados.texto,
             diasParado: dados.diasParado || null,
             cardId: dados.cardId || "",
@@ -340,6 +343,7 @@ function renderizarCentralImpedimentos(gargalos) {
         ${dataTexto}
         <div class="impedimento-acoes">
           <button class="botao-editar-impedimento" onclick="iniciarEdicaoImpedimento(this)" style="background: none; border: none; color: #0066cc; cursor: pointer; font-size: 0.9em; text-decoration: underline; padding: 0; margin-top: 8px;">Editar</button>
+          <button class="botao-resolver-impedimento" onclick="resolverImpedimento(this)" style="background: none; border: none; color: #0066cc; cursor: pointer; font-size: 0.9em; text-decoration: underline; padding: 0; margin-top: 8px;">Resolver</button>
         </div>
       </div>
     `;
@@ -432,7 +436,43 @@ function cancelarEdicaoImpedimento(button) {
     textarea.remove();
   }
   textoDiv.style.display = "block";
-  botoesDiv.innerHTML = `<button class="botao-editar-impedimento" onclick="iniciarEdicaoImpedimento(this)" style="background: none; border: none; color: #0066cc; cursor: pointer; font-size: 0.9em; text-decoration: underline; padding: 0; margin-top: 8px;">Editar</button>`;
+  botoesDiv.innerHTML = `
+    <button class="botao-editar-impedimento" onclick="iniciarEdicaoImpedimento(this)" style="background: none; border: none; color: #0066cc; cursor: pointer; font-size: 0.9em; text-decoration: underline; padding: 0; margin-top: 8px;">Editar</button>
+    <button class="botao-resolver-impedimento" onclick="resolverImpedimento(this)" style="background: none; border: none; color: #0066cc; cursor: pointer; font-size: 0.9em; text-decoration: underline; padding: 0; margin-top: 8px;">Resolver</button>
+  `;
+}
+
+function resolverImpedimento(button) {
+  const card = button.closest("[data-chave-edicao]");
+  if (!card) return;
+
+  const chaveEdicao = card.dataset.chaveEdicao;
+  const nomeTarefa = card.querySelector(".impedimento-titulo")?.textContent.trim();
+
+  if (chaveEdicao.startsWith("id:")) {
+    const cardId = chaveEdicao.substring(3);
+    const chavePorId = `impedimento-id-${cardId}`;
+    const valorPorId = localStorage.getItem(chavePorId);
+    let nomeRegistro = nomeTarefa;
+
+    if (valorPorId) {
+      try {
+        const dados = JSON.parse(valorPorId);
+        nomeRegistro = dados.cardName || nomeRegistro;
+      } catch (erro) {
+        console.warn("Registro de impedimento por ID inválido ao resolver:", cardId);
+      }
+    }
+
+    localStorage.removeItem(chavePorId);
+    if (nomeRegistro) {
+      localStorage.removeItem(`impedimento-${nomeRegistro}`);
+    }
+  } else if (chaveEdicao.startsWith("nome:")) {
+    localStorage.removeItem(`impedimento-${chaveEdicao.substring(5)}`);
+  }
+
+  renderizarCentralImpedimentos([]);
 }
 
 /**
@@ -485,7 +525,10 @@ function salvarEdicaoImpedimento(button) {
   textarea.remove();
   textoDiv.textContent = textoNovo;
   textoDiv.style.display = "block";
-  botoesDiv.innerHTML = `<button class="botao-editar-impedimento" onclick="iniciarEdicaoImpedimento(this)" style="background: none; border: none; color: #0066cc; cursor: pointer; font-size: 0.9em; text-decoration: underline; padding: 0; margin-top: 8px;">Editar</button>`;
+  botoesDiv.innerHTML = `
+    <button class="botao-editar-impedimento" onclick="iniciarEdicaoImpedimento(this)" style="background: none; border: none; color: #0066cc; cursor: pointer; font-size: 0.9em; text-decoration: underline; padding: 0; margin-top: 8px;">Editar</button>
+    <button class="botao-resolver-impedimento" onclick="resolverImpedimento(this)" style="background: none; border: none; color: #0066cc; cursor: pointer; font-size: 0.9em; text-decoration: underline; padding: 0; margin-top: 8px;">Resolver</button>
+  `;
 
   if (cardId) {
     const chaveArmazenamento = `impedimento-id-${cardId}`;
@@ -649,6 +692,8 @@ function salvarImpedimento(nomeCard) {
   } else {
     localStorage.setItem(chaveLegada, texto);
   }
+
+  campo.value = "";
 
   const resposta = fetch("/dados")
     .then(r => r.json())
