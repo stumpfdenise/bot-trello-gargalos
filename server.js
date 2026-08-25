@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const axios = require("axios");
+const { executarRotinaAutomatica } = require("./index");
 
 const app = express();
 const host = "0.0.0.0";
@@ -10,6 +11,10 @@ const key = process.env.TRELLO_KEY;
 const token = process.env.TRELLO_TOKEN;
 const diasLimite = Number(process.env.DIAS_PARADO);
 const limiteCardsEmAndamento = Number(process.env.LIMITE_CARDS_EM_ANDAMENTO);
+const intervaloConfigurado = Number(process.env.INTERVALO_ANALISE_MS);
+const intervaloAnaliseMs = Number.isFinite(intervaloConfigurado) && intervaloConfigurado >= 60000
+  ? intervaloConfigurado
+  : 15 * 60 * 1000;
 
 const boardShortId = "6ox17cAt";
 const nomeListaAnalisada = "Em andamento ";
@@ -201,6 +206,26 @@ app.get("/atividade", async (req, res) => {
   }
 });
 
+let analiseEmAndamento = false;
+
+async function executarAnaliseAgendada() {
+  if (analiseEmAndamento) {
+    return;
+  }
+
+  analiseEmAndamento = true;
+
+  try {
+    await executarRotinaAutomatica();
+  } finally {
+    analiseEmAndamento = false;
+  }
+}
+
 app.listen(port, host, () => {
   console.log(`Dashboard rodando em http://localhost:${port}/dashboard.html`);
+  console.log(`Análise automática configurada para cada ${intervaloAnaliseMs} ms.`);
+
+  executarAnaliseAgendada();
+  setInterval(executarAnaliseAgendada, intervaloAnaliseMs);
 });

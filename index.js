@@ -341,5 +341,17 @@ async function verificarECorrigirEtiquetasGargalo() {
   }
 }
 
-analisarCards();
-verificarECorrigirEtiquetasGargalo();
+async function executarRotinaAutomatica() {
+  await Promise.all([
+    analisarCards(),
+    verificarECorrigirEtiquetasGargalo(),
+  ]);
+}
+
+module.exports = {
+  executarRotinaAutomatica,
+};
+
+if (require.main === module) {
+  executarRotinaAutomatica();
+}
