@@ -3,12 +3,19 @@ const axios = require("axios");
 const key = process.env.TRELLO_KEY;
 const token = process.env.TRELLO_TOKEN;
 const nomeLabelGargalo = "Possível Gargalo";
-const marcaComentarioBot = "🤖 Bot Gargalos";
+const marcasComentarioBot = [
+  "🤖 Bot Gargalos",
+  "🤖 FlowGuard",
+];
 const limitePorPagina = 1000;
+
+function comentarioEhDoFlowGuard(texto) {
+  return marcasComentarioBot.some((marca) => texto?.includes(marca));
+}
 
 function acaoEhAutomacaoDoFlowGuard(acao) {
   if (acao.type === "commentCard") {
-    return acao.data?.text?.includes(marcaComentarioBot) === true;
+    return comentarioEhDoFlowGuard(acao.data?.text);
   }
 
   if (acao.type === "addLabelToCard" || acao.type === "removeLabelFromCard") {
@@ -68,5 +75,6 @@ async function obterUltimaAtividadeRelevante(cardId, fallbackDate) {
 
 module.exports = {
   buscarAcoesDoCartao,
+  comentarioEhDoFlowGuard,
   obterUltimaAtividadeRelevante,
 };

@@ -1,6 +1,7 @@
 require("dotenv").config();
 const axios = require("axios");
 const {
+  comentarioEhDoFlowGuard,
   obterUltimaAtividadeRelevante,
 } = require("./trelloActivity");
 
@@ -199,7 +200,7 @@ if (cardsEmAndamento.length >= limiteCardsEmAndamento) {
         );
 
         const mensagem =
-          `🤖 Bot Gargalos: este card está parado há ${diasParado} dias na lista "${nomeListaAnalisada}". Possível gargalo identificado.`;
+          `🤖 FlowGuard: este card está parado há ${diasParado} dias na lista "${nomeListaAnalisada}". Possível gargalo identificado.`;
 
         // Envia comentário automático
         // Verifica se já existe comentário do bot para evitar duplicidade
@@ -248,7 +249,7 @@ if (!jaTemComentarioDoBot) {
 }
 
 /**
- * Verifica se o card já possui um comentário enviado pelo Bot Gargalos.
+ * Verifica se o card já possui um comentário enviado pelo FlowGuard.
  * Isso evita que o sistema gere comentários duplicados sempre que for executado.
  */
 async function cardJaPossuiComentarioDoBot(cardId) {
@@ -263,7 +264,7 @@ async function cardJaPossuiComentarioDoBot(cardId) {
   });
 
   return resposta.data.some((acao) =>
-    acao.data?.text?.includes("🤖 Bot Gargalos")
+    comentarioEhDoFlowGuard(acao.data?.text)
   );
 }
 
