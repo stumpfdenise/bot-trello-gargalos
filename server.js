@@ -2,6 +2,9 @@ require("dotenv").config();
 const express = require("express");
 const axios = require("axios");
 const { executarRotinaAutomatica } = require("./index");
+const {
+  obterUltimaAtividadeRelevante,
+} = require("./trelloActivity");
 
 const app = express();
 const host = "0.0.0.0";
@@ -64,9 +67,14 @@ app.get("/dados", async (req, res) => {
       (card) => card.idList === listaEmAndamentoId
     );
 
-    const gargalos = cardsEmAndamento
-      .map((card) => {
-        const ultimaAtividade = new Date(card.dateLastActivity);
+    const dadosDosCards = await Promise.all(
+      cardsEmAndamento.map(async (card) => {
+        const dataUltimaAtividade =
+          await obterUltimaAtividadeRelevante(
+            card.id,
+            card.dateLastActivity
+          );
+        const ultimaAtividade = new Date(dataUltimaAtividade);
         const hoje = new Date();
         const diferencaMs = hoje - ultimaAtividade;
         const diasParado = Math.floor(diferencaMs / (1000 * 60 * 60 * 24));
@@ -76,9 +84,12 @@ app.get("/dados", async (req, res) => {
           nome: card.name,
           diasParado,
           url: card.url,
-          dateLastActivity: card.dateLastActivity,
+          dateLastActivity: dataUltimaAtividade,
         };
       })
+    );
+
+    const gargalos = dadosDosCards
       .filter((card) => card.diasParado >= diasLimite);
 
     res.json({

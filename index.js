@@ -1,5 +1,8 @@
 require("dotenv").config();
 const axios = require("axios");
+const {
+  obterUltimaAtividadeRelevante,
+} = require("./trelloActivity");
 
 // Credenciais e configurações carregadas do arquivo .env
 const key = process.env.TRELLO_KEY;
@@ -165,9 +168,12 @@ if (cardsEmAndamento.length >= limiteCardsEmAndamento) {
 }
 
     for (const card of cardsEmAndamento) {
-      const ultimaAtividade = new Date(
-        card.dateLastActivity
-      );
+      const dataUltimaAtividade =
+        await obterUltimaAtividadeRelevante(
+          card.id,
+          card.dateLastActivity
+        );
+      const ultimaAtividade = new Date(dataUltimaAtividade);
 
       const hoje = new Date();
 
@@ -181,7 +187,7 @@ if (cardsEmAndamento.length >= limiteCardsEmAndamento) {
 
       console.log(`🟢 Cartão: ${card.name}`);
       console.log(
-        `Última atividade: ${card.dateLastActivity}`
+        `Última atividade: ${dataUltimaAtividade}`
       );
 
       console.log(`Dias parado: ${diasParado}`);
@@ -320,7 +326,12 @@ async function verificarECorrigirEtiquetasGargalo() {
       }
 
       // Card está em "Em andamento", verificar se ainda atende ao critério
-      const ultimaAtividade = new Date(card.dateLastActivity);
+      const dataUltimaAtividade =
+        await obterUltimaAtividadeRelevante(
+          card.id,
+          card.dateLastActivity
+        );
+      const ultimaAtividade = new Date(dataUltimaAtividade);
       const hoje = new Date();
       const diferencaMs = hoje - ultimaAtividade;
       const diasParado = Math.floor(diferencaMs / (1000 * 60 * 60 * 24));
