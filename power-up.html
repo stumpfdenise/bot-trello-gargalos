@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FlowGuard Power-Up</title>
+</head>
+<body>
+  <script src="https://p.trello.com/power-ups.js"></script>
+  <script>
+    const dashboardUrl = "https://bot-trello-gargalos.onrender.com/dashboard.html";
+
+    TrelloPowerUp.initialize({
+      "board-buttons": function () {
+        return [
+          {
+            text: "FlowGuard",
+            callback: function () {
+              window.open(dashboardUrl, "_blank", "noopener,noreferrer");
+            },
+          },
+        ];
+      },
+    });
+  </script>
+</body>
+</html>
