@@ -8,19 +8,13 @@
 <body>
   <script src="https://p.trello.com/power-ups.js"></script>
   <script>
-    const dashboardUrl = "https://bot-trello-gargalos.onrender.com/dashboard.html";
-
     window.TrelloPowerUp.initialize({
-      "board-buttons": function () {
+      "board-buttons": function (t, opts) {
         return [
           {
             text: "FlowGuard",
-            icon: {
-              dark: "https://bot-trello-gargalos.onrender.com/assets/flowguard-logo.png",
-              light: "https://bot-trello-gargalos.onrender.com/assets/flowguard-logo-light.png",
-            },
             condition: "always",
-            url: dashboardUrl,
+            url: "https://bot-trello-gargalos.onrender.com/dashboard.html",
             target: "_blank",
           },
         ];
