@@ -158,7 +158,7 @@ async function analisarCards() {
     );
 
     // Analisa possível sobrecarga na lista "Em andamento"
-if (cardsEmAndamento.length >= limiteCardsEmAndamento) {
+if (cardsEmAndamento.length > limiteCardsEmAndamento) {
   console.log("⚠️ POSSÍVEL SOBRECARGA IDENTIFICADA!");
   console.log(
     `A lista "${nomeListaAnalisada}" possui ${cardsEmAndamento.length} cartões em andamento.`
