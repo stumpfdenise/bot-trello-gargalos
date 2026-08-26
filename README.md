@@ -20,15 +20,13 @@ O FlowGuard monitora cartões em andamento no Trello, analisa o período desde a
 
 ## Fluxo Kanban
 
-A lista `GARGALOS IDENTIFICADOS` foi removida manualmente do quadro Trello. O fluxo visual atual é:
+O fluxo visual atual é:
 
 ```text
 Backlog → Em andamento → Concluído
 ```
 
 Os possíveis gargalos permanecem em `Em andamento`. Ser identificado como possível gargalo não representa uma nova etapa do Kanban: o FlowGuard apenas sinaliza uma condição do cartão por meio da dashboard, do resumo do Power-Up, da etiqueta `Possível Gargalo` e, quando aplicável, de um comentário automático.
-
-A auditoria do código confirmou que não existe dependência do nome ou de um ID da lista `GARGALOS IDENTIFICADOS`. A aplicação consulta somente a lista `Em andamento `, incluindo o espaço final presente no nome configurado.
 
 ---
 
