@@ -18,6 +18,20 @@ O FlowGuard monitora cartões em andamento no Trello, analisa o período desde a
 
 ---
 
+## Fluxo Kanban
+
+A lista `GARGALOS IDENTIFICADOS` foi removida manualmente do quadro Trello. O fluxo visual atual é:
+
+```text
+Backlog → Em andamento → Concluído
+```
+
+Os possíveis gargalos permanecem em `Em andamento`. Ser identificado como possível gargalo não representa uma nova etapa do Kanban: o FlowGuard apenas sinaliza uma condição do cartão por meio da dashboard, do resumo do Power-Up, da etiqueta `Possível Gargalo` e, quando aplicável, de um comentário automático.
+
+A auditoria do código confirmou que não existe dependência do nome ou de um ID da lista `GARGALOS IDENTIFICADOS`. A aplicação consulta somente a lista `Em andamento `, incluindo o espaço final presente no nome configurado.
+
+---
+
 ## Da Ágil IA ao FlowGuard
 
 A proposta inicial da pesquisa previa o desenvolvimento de um bot denominado **Ágil IA**, voltado à identificação de possíveis gargalos em projetos ágeis.
@@ -46,7 +60,11 @@ O nome **Bot Gargalos** permanece apenas na detecção de comentários legados, 
 - acesso direto aos cartões monitorados no Trello;
 - dashboard responsiva;
 - tema claro e escuro;
-- monitoramento periódico configurável.
+- monitoramento periódico configurável;
+- integração como Power-Up do Trello;
+- botão **FlowGuard** diretamente no quadro;
+- resumo rápido do estado do fluxo;
+- acesso ao dashboard completo pelo Power-Up.
 
 ---
 
@@ -150,6 +168,35 @@ O botão **Atualizar** da dashboard apenas recarrega os dados exibidos; ele não
 
 ---
 
+## Power-Up do Trello
+
+O FlowGuard possui integração funcional como Power-Up do Trello. O connector iframe utilizado é:
+
+```text
+https://bot-trello-gargalos.onrender.com/power-up.html
+```
+
+O conector utiliza a Trello Power-Up Client Library oficial:
+
+```text
+https://p.trellocdn.com/power-up.min.js
+```
+
+Quando habilitado no quadro, o Power-Up adiciona um botão **FlowGuard** ao cabeçalho do Trello. Ao clicar no botão, é aberto um popup dentro do próprio Trello por meio de `t.popup()`.
+
+O popup utiliza a página `power-up-summary.html` e consulta somente `GET /dados`. Ele apresenta:
+
+- quantidade de cartões em andamento;
+- quantidade de possíveis gargalos;
+- WIP atual e limite configurado;
+- situação do WIP;
+- saúde do fluxo;
+- botão **Abrir dashboard completo**.
+
+O Power-Up funciona como uma camada de visualização e acesso rápido. Ele não duplica a lógica de detecção de gargalos nem altera cartões, comentários, etiquetas ou impedimentos. A análise continua sendo realizada pelo backend do FlowGuard.
+
+---
+
 ## Tecnologias utilizadas
 
 ### Backend
@@ -168,6 +215,8 @@ O botão **Atualizar** da dashboard apenas recarrega os dados exibidos; ele não
 ### Integração e persistência
 
 - Trello REST API;
+- Trello Power-Up;
+- Trello Power-Up Client Library;
 - Web Storage API (`localStorage`).
 
 ### Versionamento
@@ -188,11 +237,19 @@ FlowGuard (Node.js / Express)
 	+--> Análise automática: gargalos, comentários e etiquetas
 	+--> API da dashboard: /dados e /atividade
 				  |
-				  v
-		      Dashboard HTML / CSS / JS
+				  +---------------------------+
+				  |                           |
+				  v                           v
+			      Dashboard HTML / CSS / JS  Trello Power-Up
+				                              |
+				                              v
+				                       Resumo do fluxo
+				                              |
+				                              v
+				                     Dashboard completo
 				  |
 				  v
-		      localStorage: impedimentos e tema
+			      localStorage: impedimentos e tema
 ```
 
 ---
@@ -249,11 +306,32 @@ A interface oferece temas claro e escuro, permitindo adaptar a visualização à
 
 ![Atividade recente FlowGuard — tema claro](assets/dashboard2-light.png)
 
+### Power-Up do Trello
+
+![Quadro Trello com o botão FlowGuard](assets/trello-flowguard.png)
+
+![Popup de resumo do FlowGuard no Trello](assets/flowguard-powerup-resumo.png)
+
+![Resumo de WIP e saúde do fluxo no Power-Up](assets/flowguard-powerup-wip.png)
+
 ---
 
 ## Testes e validação do MVP
 
 O desenvolvimento ocorreu de maneira incremental, com validações manuais realizadas diretamente sobre um quadro utilizado como ambiente de demonstração. Foram avaliados cenários de detecção de cartões parados, limites de dias, etiquetas, comentários duplicados, correção de etiquetas, WIP, impedimentos, registros locais anteriores, responsividade e temas.
+
+Também foi realizada a validação manual do Power-Up no quadro de demonstração, incluindo:
+
+- carregamento do connector iframe;
+- habilitação do Power-Up;
+- exibição do botão **FlowGuard**;
+- abertura do popup;
+- carregamento dos dados do resumo;
+- exibição de cartões em andamento;
+- exibição dos possíveis gargalos;
+- exibição do WIP atual e do limite;
+- exibição da saúde do fluxo;
+- abertura do dashboard completo.
 
 O projeto não possui testes automatizados configurados no `package.json`. A validação depende atualmente de verificações manuais e da disponibilidade do quadro e da API do Trello.
 
@@ -304,7 +382,7 @@ A proposta explora como ferramentas automatizadas podem auxiliar na identificaç
 
 **MVP funcional.**
 
-A versão atual contempla integração com o Trello, detecção de possíveis gargalos, monitoramento de WIP, automação de comentários e etiquetas, dashboard, Central de Impedimentos e visualização de atividades recentes.
+A versão atual contempla integração com o Trello, detecção de possíveis gargalos, automação de comentários e etiquetas, monitoramento de WIP, indicador de saúde do fluxo, dashboard, Central de Impedimentos, visualização de atividades recentes e Power-Up integrado ao Trello com resumo do fluxo e acesso ao dashboard completo.
 
 ---
 
