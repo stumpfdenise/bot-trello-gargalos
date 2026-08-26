@@ -14,8 +14,12 @@
           {
             text: "FlowGuard",
             condition: "always",
-            url: "https://bot-trello-gargalos.onrender.com/dashboard.html",
-            target: "_blank",
+            callback: function (t) {
+              return t.popup({
+                title: "FlowGuard",
+                url: "power-up-summary.html",
+              });
+            },
           },
         ];
       },

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resumo FlowGuard</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: #17213f;
+      background: #f2f3f6;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 240px;
+      padding: 16px;
+      background: linear-gradient(145deg, #ffffff, #eef0f5);
+    }
+
+    h1 {
+      margin: 0 0 14px;
+      font-size: 1.2rem;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .metric {
+      padding: 11px;
+      border: 1px solid #d8dce7;
+      border-radius: 8px;
+      background: #ffffff;
+    }
+
+    .label {
+      color: #65718c;
+      font-size: .7rem;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
+    .value {
+      margin-top: 5px;
+      font-size: 1.25rem;
+      font-weight: 650;
+    }
+
+    #status { color: #2d7a3e; }
+    #status.warning { color: #a36b00; }
+    #status.danger { color: #b23a3d; }
+
+    .dashboard-link {
+      display: block;
+      margin-top: 14px;
+      padding: 10px 12px;
+      border-radius: 7px;
+      color: #ffffff;
+      background: #405bb5;
+      text-align: center;
+      text-decoration: none;
+      font-size: .85rem;
+      font-weight: 600;
+    }
+
+    .message {
+      color: #65718c;
+      font-size: .85rem;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Resumo do fluxo</h1>
+    <div id="content" class="message">Carregando dados...</div>
+    <a
+      class="dashboard-link"
+      href="https://bot-trello-gargalos.onrender.com/dashboard.html"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Abrir dashboard completo
+    </a>
+  </main>
+
+  <script>
+    const content = document.getElementById("content");
+
+    function renderizarResumo(dados) {
+      const totalEmAndamento = Number(dados.totalEmAndamento) || 0;
+      const limiteWip = Number(dados.limiteCardsEmAndamento) || 0;
+      const totalGargalos = Array.isArray(dados.gargalos) ? dados.gargalos.length : 0;
+      const wipAcimaDoLimite = totalEmAndamento > limiteWip;
+      const wipNoLimite = totalEmAndamento === limiteWip;
+      const status = totalGargalos > 2 || wipAcimaDoLimite
+        ? "Atenção"
+        : totalGargalos > 0
+          ? "Atenção"
+          : "Saudável";
+      const classeStatus = totalGargalos > 2 || wipAcimaDoLimite
+        ? "danger"
+        : totalGargalos > 0
+          ? "warning"
+          : "";
+      const situacaoWip = wipAcimaDoLimite
+        ? "Sobrecarga"
+        : wipNoLimite
+          ? "WIP no limite"
+          : "Normal";
+
+      content.className = "summary";
+      content.innerHTML = `
+        <div class="metric">
+          <div class="label">Em andamento</div>
+          <div class="value">${totalEmAndamento}</div>
+        </div>
+        <div class="metric">
+          <div class="label">Gargalos</div>
+          <div class="value">${totalGargalos}</div>
+        </div>
+        <div class="metric">
+          <div class="label">WIP</div>
+          <div class="value">${totalEmAndamento}/${limiteWip}</div>
+          <div class="label">${situacaoWip}</div>
+        </div>
+        <div class="metric">
+          <div class="label">Saúde do fluxo</div>
+          <div id="status" class="value ${classeStatus}">${status}</div>
+        </div>
+      `;
+    }
+
+    fetch("/dados")
+      .then((resposta) => {
+        if (!resposta.ok) {
+          throw new Error(`Erro ${resposta.status}`);
+        }
+        return resposta.json();
+      })
+      .then(renderizarResumo)
+      .catch((erro) => {
+        content.className = "message";
+        content.textContent = `Não foi possível carregar o resumo: ${erro.message}`;
+      });
+  </script>
+</body>
+</html>
