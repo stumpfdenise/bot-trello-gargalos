@@ -10,14 +10,18 @@
   <script>
     const dashboardUrl = "https://bot-trello-gargalos.onrender.com/dashboard.html";
 
-    TrelloPowerUp.initialize({
+    window.TrelloPowerUp.initialize({
       "board-buttons": function () {
         return [
           {
             text: "FlowGuard",
-            callback: function () {
-              window.open(dashboardUrl, "_blank", "noopener,noreferrer");
+            icon: {
+              dark: "https://bot-trello-gargalos.onrender.com/assets/flowguard-logo.png",
+              light: "https://bot-trello-gargalos.onrender.com/assets/flowguard-logo-light.png",
             },
+            condition: "always",
+            url: dashboardUrl,
+            target: "_blank",
           },
         ];
       },
