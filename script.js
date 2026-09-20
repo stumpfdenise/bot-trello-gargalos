@@ -106,7 +106,7 @@ function atualizarStatusGeral(dados) {
   // Determinar status baseado em gargalos E sobrecarga de WIP
   let status = "verde";
   let titulo = "SAUDÁVEL";
-  let descricao = "Nenhum gargalo foi identificado na lista em andamento.";
+  let descricao = "Nenhum possível gargalo foi identificado na lista em andamento.";
 
   // Verificar se há gargalos
   if (totalGargalos > 0) {
@@ -115,11 +115,11 @@ function atualizarStatusGeral(dados) {
       titulo = "ATENÇÃO";
 
       if (sobrecargaWIP) {
-        descricao = `Há múltiplos gargalos identificados (${totalGargalos}). Limite de trabalho em andamento excedido: ${totalEmAndamento} de ${limiteCardsEmAndamento} tarefas. Atenção da equipe necessária.`;
+        descricao = `Há múltiplos possíveis gargalos sinalizados (${totalGargalos}). Limite de trabalho em andamento excedido: ${totalEmAndamento} de ${limiteCardsEmAndamento} tarefas. Atenção da equipe necessária.`;
       } else if (wipNoLimite) {
-        descricao = `Há múltiplos gargalos identificados (${totalGargalos}). WIP no limite: ${totalEmAndamento} de ${limiteCardsEmAndamento} tarefas.`;
+        descricao = `Há múltiplos possíveis gargalos sinalizados (${totalGargalos}). WIP no limite: ${totalEmAndamento} de ${limiteCardsEmAndamento} tarefas.`;
       } else {
-        descricao = "Há múltiplos gargalos identificados. Recomenda-se atenção da equipe.";
+        descricao = "Há múltiplos possíveis gargalos sinalizados. Recomenda-se atenção da equipe.";
       }
     } else {
       status = "amarelo";
@@ -162,7 +162,7 @@ function renderizarGargalos(gargalos) {
   if (!gargalos || gargalos.length === 0) {
     listaGargalos.innerHTML = `
       <div class="empty-state">
-        Nenhum gargalo identificado. Fluxo saudável.
+        Nenhum possível gargalo sinalizado. Fluxo saudável.
       </div>
     `;
     return;
