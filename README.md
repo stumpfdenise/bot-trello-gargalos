@@ -1,10 +1,12 @@
 # FlowGuard
 
-**Monitoramento inteligente de gargalos e impedimentos em fluxos Kanban integrados ao Trello.**
+**Monitoramento de sinais de possível gargalo e impedimentos em fluxos Kanban integrados ao Trello.**
 
-O **FlowGuard** é um MVP desenvolvido para apoiar o acompanhamento de equipes que utilizam métodos ágeis, identificando automaticamente tarefas potencialmente paradas, situações de sobrecarga do trabalho em andamento (WIP) e impedimentos registrados pela equipe.
+O **FlowGuard** é um MVP desenvolvido para apoiar o acompanhamento de equipes que utilizam métodos ágeis, sinalizando tarefas com indícios objetivos de possível gargalo, situações de sobrecarga do trabalho em andamento (WIP) e impedimentos registrados pela equipe.
 
-A solução integra-se à API do Trello e combina automação com uma dashboard própria, reunindo informações sobre o estado do fluxo, possíveis gargalos, impedimentos e atividades recentes em uma única interface.
+A solução integra-se à API do Trello e combina automação baseada em regras objetivas com uma dashboard própria, reunindo informações sobre o estado do fluxo, possíveis gargalos, impedimentos e atividades recentes em uma única interface.
+
+> O MVP atual não implementa IA, NLP, aprendizado de máquina ou análise preditiva como funcionalidade ativa. A solução utiliza regras objetivas para identificar sinais de possível gargalo e monitorar o fluxo.
 
 > Projeto desenvolvido no contexto de Iniciação Científica a partir da pesquisa **“Integração de Bots em Projetos Ágeis: Menos Gargalos, Mais Resultados”**.
 
@@ -32,11 +34,11 @@ Os possíveis gargalos permanecem em `Em andamento`. Ser identificado como poss�
 
 ## Da Ágil IA ao FlowGuard
 
-A proposta inicial da pesquisa previa o desenvolvimento de um bot denominado **Ágil IA**, voltado à identificação de possíveis gargalos em projetos ágeis.
+A proposta inicial da pesquisa previa o desenvolvimento de um bot denominado **Ágil IA**, voltado à identificação de sinais de possível gargalo em projetos ágeis. Esse conceito inicial representava uma fase de investigação e prototipagem, mas não corresponde ao MVP atual.
 
 Durante o desenvolvimento e os testes funcionais, o protótipo evoluiu. A solução deixou de atuar apenas como um bot responsável por analisar e comentar cartões do Trello e passou a incorporar uma interface própria para acompanhamento do fluxo, monitoramento de WIP, registro de impedimentos, histórico de atividades e automação periódica.
 
-Essa evolução deu origem ao **FlowGuard**, identidade adotada para a versão atual do MVP.
+Essa evolução deu origem ao **FlowGuard**, identidade adotada para a versão atual do MVP. O MVP final utiliza automação baseada em regras objetivas para sinalizar possíveis gargalos e não inclui IA, NLP, aprendizado de máquina ou análise preditiva como funcionalidades ativas.
 
 O nome **Bot Gargalos** permanece apenas na detecção de comentários legados, para evitar que comentários produzidos por versões anteriores sejam tratados como atividade relevante.
 
@@ -66,7 +68,7 @@ O nome **Bot Gargalos** permanece apenas na detecção de comentários legados, 
 
 ---
 
-## Como funciona a detecção de gargalos
+## Como funciona a identificação de sinais de possível gargalo
 
 O FlowGuard monitora os cartões da lista configurada como **Em andamento**. Para cada cartão, o sistema busca as ações do Trello, identifica a última atividade relevante e calcula quantos dias se passaram desde essa ação.
 
@@ -76,9 +78,9 @@ Quando:
 dias sem atividade >= DIAS_PARADO
 ```
 
-o cartão passa a ser considerado um possível gargalo.
+o cartão passa a ser sinalizado como possível gargalo, indicando a necessidade de avaliação da equipe.
 
-Quando um possível gargalo é identificado, o FlowGuard:
+Quando um sinal de possível gargalo é identificado, o FlowGuard:
 
 1. sinaliza o cartão na dashboard;
 2. adiciona a etiqueta `Possível Gargalo` no Trello, se ela ainda não estiver presente;
@@ -119,6 +121,8 @@ A sobrecarga ocorre somente quando:
 ```text
 totalEmAndamento > LIMITE_CARDS_EM_ANDAMENTO
 ```
+
+> O WIP é um indicador separado. Ultrapassar o limite pode indicar sobrecarga do fluxo, mas não confirma automaticamente a existência de um gargalo.
 
 ---
 
@@ -380,7 +384,7 @@ A proposta explora como ferramentas automatizadas podem auxiliar na identificaç
 
 **MVP funcional.**
 
-A versão atual contempla integração com o Trello, detecção de possíveis gargalos, automação de comentários e etiquetas, monitoramento de WIP, indicador de saúde do fluxo, dashboard, Central de Impedimentos, visualização de atividades recentes e Power-Up integrado ao Trello com resumo do fluxo e acesso ao dashboard completo.
+A versão atual contempla integração com o Trello, identificação de sinais de possível gargalo, automação de comentários e etiquetas, monitoramento de WIP, indicador de saúde do fluxo, dashboard, Central de Impedimentos, visualização de atividades recentes e Power-Up integrado ao Trello com resumo do fluxo e acesso ao dashboard completo.
 
 ---
 
@@ -392,4 +396,4 @@ Curso de **Análise e Desenvolvimento de Sistemas — UniCesumar**.
 
 ---
 
-> **FlowGuard** — acompanhando o fluxo para que gargalos não passem despercebidos.
+> **FlowGuard** — acompanhando o fluxo para sinalizar possíveis gargalos e apoiar a decisão da equipe.

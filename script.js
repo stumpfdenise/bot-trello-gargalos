@@ -103,7 +103,7 @@ function atualizarStatusGeral(dados) {
   // Remover classes anteriores
   statusGeral.classList.remove("verde", "amarelo", "vermelho");
 
-  // Determinar status baseado em gargalos E sobrecarga de WIP
+  // Determinar status baseado em possível gargalo sinalizado e sobrecarga de WIP
   let status = "verde";
   let titulo = "SAUDÁVEL";
   let descricao = "Nenhum possível gargalo foi identificado na lista em andamento.";
@@ -168,7 +168,7 @@ function renderizarGargalos(gargalos) {
     return;
   }
 
-  // Renderizar cada gargalo
+  // Renderizar cada possível gargalo sinalizado
   gargalos.forEach((gargalo) => {
     const urlLink = gargalo.url
       ? `<a class="gargalo-link" href="${gargalo.url}" target="_blank" rel="noopener noreferrer">Ver no Trello</a>`
@@ -426,6 +426,7 @@ function iniciarEdicaoImpedimento(button) {
   textarea.value = textoAtual;
   textarea.style.display = "block";
   textarea.style.width = "100%";
+
   textarea.style.minHeight = "80px";
   textarea.style.marginBottom = "10px";
   textarea.style.padding = "8px";

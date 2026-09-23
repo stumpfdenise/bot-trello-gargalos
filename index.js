@@ -193,14 +193,14 @@ if (cardsEmAndamento.length > limiteCardsEmAndamento) {
 
       console.log(`Dias parado: ${diasParado}`);
 
-      // Verifica possível gargalo
+      // Verifica sinal de possível gargalo
       if (diasParado >= diasLimite) {
         console.log(
-          "⚠️ POSSÍVEL GARGALO IDENTIFICADO!"
+          "⚠️ SINAL DE POSSÍVEL GARGALO IDENTIFICADO!"
         );
 
         const mensagem =
-          `🤖 FlowGuard: este card está parado há ${diasParado} dias na lista "${nomeListaAnalisada}". Possível gargalo identificado.`;
+          `🤖 FlowGuard: este card está sem atividade humana relevante há ${diasParado} dias na lista "${nomeListaAnalisada}" e foi sinalizado como possível gargalo para avaliação da equipe.`;
 
         // Envia comentário automático
         // Verifica se já existe comentário do bot para evitar duplicidade
@@ -225,11 +225,11 @@ if (!jaTemComentarioDoBot) {
           );
 
           console.log(
-            "🏷️ Etiqueta de gargalo adicionada ao card!"
+            "🏷️ Etiqueta 'Possível Gargalo' adicionada ao card!"
           );
         } else {
           console.log(
-            "🏷️ O card já possui a etiqueta de gargalo."
+            "🏷️ O card já possui a etiqueta 'Possível Gargalo'."
           );
         }
 
@@ -341,7 +341,7 @@ async function verificarECorrigirEtiquetasGargalo() {
         // Card deixou de atender ao critério, remover etiqueta
         await removerLabelDoCard(card.id, labelGargaloId);
         console.log(
-          `🔄 Etiqueta removida: ${card.name} não está mais em gargalo (${diasParado} dias).`
+          `🔄 Etiqueta removida: ${card.name} não atende mais ao critério de possível gargalo (${diasParado} dias).`
         );
       }
     }
