@@ -288,11 +288,13 @@ npm start
 
 Por padrão, a aplicação fica disponível em `http://localhost:3000`.
 
+Dashboard publicada: [https://bot-trello-gargalos.onrender.com/dashboard.html](https://bot-trello-gargalos.onrender.com/dashboard.html)
+
 ---
 
 ## Interface
 
-A dashboard responsiva centraliza a visualização do fluxo Kanban, gargalos identificados, impedimentos e atividades recentes.
+A dashboard responsiva centraliza a visualização do fluxo Kanban, possíveis gargalos sinalizados, impedimentos e atividades recentes.
 
 A interface oferece temas claro e escuro, permitindo adaptar a visualização à preferência do usuário.
 
