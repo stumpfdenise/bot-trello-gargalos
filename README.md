@@ -1,22 +1,34 @@
 # FlowGuard
 
-**Monitoramento de sinais de possível gargalo e impedimentos em fluxos Kanban integrados ao Trello.**
+**Dashboard web para acompanhamento de fluxos Kanban integrados ao Trello.**
 
-O **FlowGuard** é um MVP desenvolvido para apoiar o acompanhamento de equipes que utilizam métodos ágeis, sinalizando tarefas com indícios objetivos de possível gargalo, situações de sobrecarga do trabalho em andamento (WIP) e impedimentos registrados pela equipe.
+O FlowGuard é um MVP desenvolvido em um projeto de Iniciação Científica para ajudar equipes a perceber cartões parados e impedimentos no fluxo. Com automação baseada em regras objetivas, sinaliza possíveis gargalos a partir da atividade dos cartões. Integra a Trello REST API, um backend em Node.js e uma interface web responsiva.
 
-A solução integra-se à API do Trello e combina automação baseada em regras objetivas com uma dashboard própria, reunindo informações sobre o estado do fluxo, possíveis gargalos, impedimentos e atividades recentes em uma única interface.
+**Acesso:** [Experimentar o dashboard](https://bot-trello-gargalos.onrender.com/dashboard.html) · [Repositório GitHub](https://github.com/stumpfdenise/bot-trello-gargalos)
 
-> O MVP atual não implementa IA, NLP, aprendizado de máquina ou análise preditiva como funcionalidade ativa. A solução utiliza regras objetivas para identificar sinais de possível gargalo e monitorar o fluxo.
+![Dashboard FlowGuard — tema escuro](assets/dashboard-dark.png)
 
-> Projeto desenvolvido no contexto de Iniciação Científica a partir da pesquisa **“Integração de Bots em Projetos Ágeis: Menos Gargalos, Mais Resultados”**.
+**Diferenciais**
+
+- Integração real com o Trello;
+- sinalização automática de possíveis gargalos;
+- monitoramento de WIP;
+- dashboard responsiva;
+- Central de Impedimentos;
+- Power-Up integrado ao Trello;
+- validação funcional manual do MVP.
+
+Os sinais indicam cartões que podem exigir avaliação da equipe, não gargalos comprovados. WIP é um indicador separado de carga do fluxo.
+
+**Tecnologias:** JavaScript, HTML, CSS, Node.js, Express.js, Axios, Trello REST API, Trello Power-Up e Git/GitHub.
 
 ---
 
 ## Sobre o projeto
 
-Em equipes que trabalham com métodos ágeis e utilizam quadros Kanban, uma tarefa pode permanecer em andamento por vários dias sem que essa situação seja percebida imediatamente. O excesso de atividades simultâneas e a existência de impedimentos também podem comprometer o fluxo de trabalho.
+Em equipes que trabalham com métodos ágeis e utilizam quadros Kanban, o tempo sem atividade, o volume de trabalho em andamento e os impedimentos podem dificultar a leitura do fluxo e a identificação de situações que merecem atenção.
 
-O FlowGuard monitora cartões em andamento no Trello, analisa o período desde a última atividade relevante da equipe e sinaliza possíveis gargalos quando o limite configurado é atingido. A solução também acompanha o limite de trabalho em andamento (WIP), permite registrar impedimentos e reúne informações do quadro em uma dashboard web.
+O projeto reúne esses sinais em uma interface para apoiar a avaliação da equipe, sem substituir sua tomada de decisão.
 
 ---
 
@@ -300,8 +312,6 @@ A interface oferece temas claro e escuro, permitindo adaptar a visualização à
 
 ### Tema escuro
 
-![Dashboard FlowGuard — tema escuro](assets/dashboard-dark.png)
-
 ![Atividade recente FlowGuard — tema escuro](assets/dashboard2-dark.png)
 
 ### Tema claro
@@ -376,7 +386,7 @@ Possibilidades fora do escopo atual do MVP incluem:
 
 ## Contexto acadêmico
 
-O FlowGuard foi desenvolvido no contexto de um projeto de **Iniciação Científica**, investigando o uso de automação como apoio ao acompanhamento de projetos ágeis.
+O FlowGuard foi desenvolvido no contexto de um projeto de **Iniciação Científica**, a partir da pesquisa **“Integração de Bots em Projetos Ágeis: Menos Gargalos, Mais Resultados”**, que investiga o uso de automação como apoio ao acompanhamento de projetos ágeis.
 
 A proposta explora como ferramentas automatizadas podem auxiliar na identificação de situações que exigem atenção da equipe sem substituir a tomada de decisão humana. O sistema atua como ferramenta de **apoio e sinalização**.
 
